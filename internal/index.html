@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#07090d" />
+  <meta name="description" content="LibreDesk — a self-hosted customer support platform for email, live chat and WhatsApp, with AI, automation, analytics and integrations." />
+  <title>LibreDesk — Support, owned.</title>
+
+  <!-- Premium type. The page still works if this font request is unavailable. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#07090d;
+      --bg2:#0b0f16;
+      --panel:rgba(16,21,31,.72);
+      --panel-solid:#10151e;
+      --line:rgba(255,255,255,.09);
+      --line-strong:rgba(255,255,255,.16);
+      --text:#f4f7fb;
+      --muted:#98a3b5;
+      --muted2:#6e7888;
+      --accent:#72f6bd;
+      --accent2:#6ba7ff;
+      --purple:#a18cff;
+      --warn:#ffcf70;
+      --danger:#ff7e91;
+      --shadow:0 30px 100px rgba(0,0,0,.45);
+      --radius:24px;
+      --max:1240px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:var(--bg)}
+    body{
+      margin:0;background:
+      radial-gradient(circle at 50% -20%,rgba(107,167,255,.13),transparent 34rem),
+      radial-gradient(circle at 80% 20%,rgba(161,140,255,.09),transparent 30rem),
+      var(--bg);
+      color:var(--text);font-family:Manrope,system-ui,sans-serif;
+      overflow-x:hidden;
+    }
+    body:before{
+      content:"";position:fixed;inset:0;pointer-events:none;z-index:999;
+      opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+    }
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+    .container{width:min(calc(100% - 40px),var(--max));margin:auto}
+    .mono{font-family:"DM Mono",monospace}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:9px;color:var(--muted);
+      font:500 11px "DM Mono",monospace;letter-spacing:.16em;text-transform:uppercase
+    }
+    .eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 18px var(--accent)}
+    .nav{
+      position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:50;
+      width:min(calc(100% - 28px),1120px);height:58px;padding:0 10px 0 18px;
+      display:flex;align-items:center;justify-content:space-between;
+      border:1px solid var(--line);border-radius:18px;background:rgba(8,11,16,.72);
+      backdrop-filter:blur(20px);box-shadow:0 15px 50px rgba(0,0,0,.24)
+    }
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.03em}
+    .brand-mark{width:28px;height:28px;border-radius:9px;position:relative;overflow:hidden;
+      background:linear-gradient(145deg,#dfffee 0%,#72f6bd 48%,#6ba7ff 100%);
+      box-shadow:0 0 25px rgba(114,246,189,.2)}
+    .brand-mark:before,.brand-mark:after{content:"";position:absolute;border:2px solid #08100e;border-radius:50%}
+    .brand-mark:before{width:11px;height:11px;left:5px;top:7px}
+    .brand-mark:after{width:7px;height:7px;right:4px;bottom:5px}
+    .nav-links{display:flex;gap:4px}
+    .nav-links a{font-size:12px;color:var(--muted);padding:9px 11px;border-radius:10px}
+    .nav-links a:hover{background:rgba(255,255,255,.05);color:var(--text)}
+    .nav-cta,.btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:9px;border:0;cursor:pointer;
+      padding:11px 16px;border-radius:12px;font-weight:700;font-size:12px;
+      color:#06100c;background:var(--accent);box-shadow:0 10px 30px rgba(114,246,189,.16);
+      transition:.25s ease
+    }
+    .nav-cta:hover,.btn:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(114,246,189,.24)}
+    .btn.secondary{color:var(--text);background:rgba(255,255,255,.06);border:1px solid var(--line)}
+    .btn.secondary:hover{background:rgba(255,255,255,.1)}
+    .menu{display:none;background:none;border:0;color:var(--text);font-size:22px}
+
+    /* HERO */
+    .hero{min-height:930px;padding:160px 0 80px;position:relative;isolation:isolate}
+    #hero3d{position:absolute;inset:0;width:100%;height:100%;z-index:-2}
+    .hero:after{content:"";position:absolute;inset:0;z-index:-1;
+      background:linear-gradient(180deg,rgba(7,9,13,.12),rgba(7,9,13,.62) 72%,var(--bg) 100%);
+      pointer-events:none}
+    .hero-copy{max-width:870px;margin:0 auto;text-align:center;position:relative}
+    .hero h1{font-size:clamp(52px,8.3vw,112px);line-height:.91;letter-spacing:-.075em;margin:22px 0 25px;font-weight:800}
+    .gradient{background:linear-gradient(110deg,#fff 10%,#b7c6dc 45%,#72f6bd 78%,#6ba7ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero p{max-width:680px;margin:auto;color:#b0bac9;font-size:clamp(16px,2vw,20px);line-height:1.65}
+    .hero-actions{display:flex;justify-content:center;gap:10px;margin:32px 0 22px;flex-wrap:wrap}
+    .trust{color:var(--muted2);font:11px "DM Mono",monospace;letter-spacing:.04em}
+    .hero-orbit{position:absolute;width:min(70vw,780px);height:min(70vw,780px);left:50%;top:52%;transform:translate(-50%,-50%);
+      border:1px solid rgba(255,255,255,.035);border-radius:50%;pointer-events:none}
+    .hero-orbit:before,.hero-orbit:after{content:"";position:absolute;inset:9%;border:1px solid rgba(114,246,189,.045);border-radius:50%;transform:rotate(22deg) scaleX(1.7)}
+    .hero-orbit:after{inset:20%;transform:rotate(-32deg) scaleX(1.5)}
+
+    /* FLOATING PRODUCT PREVIEW */
+    .preview-wrap{margin:76px auto 0;max-width:1100px;perspective:1600px}
+    .product-window{
+      position:relative;transform:rotateX(8deg) rotateY(-4deg);transform-style:preserve-3d;
+      border:1px solid rgba(255,255,255,.14);border-radius:22px;overflow:hidden;
+      background:rgba(11,15,22,.84);box-shadow:0 60px 130px rgba(0,0,0,.52),0 0 80px rgba(107,167,255,.06);
+      transition:transform .18s ease
+    }
+    .window-bar{height:42px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 14px;gap:6px;background:rgba(255,255,255,.025)}
+    .dot{width:8px;height:8px;border-radius:50%;background:#39404c}.dot:first-child{background:#ff7e91}.dot:nth-child(2){background:#ffcf70}.dot:nth-child(3){background:#72f6bd}
+    .window-label{margin-left:10px;color:#6e7888;font:10px "DM Mono",monospace}
+    .app{display:grid;grid-template-columns:52px 245px 1fr 225px;min-height:470px}
+    .rail{border-right:1px solid var(--line);padding:14px 9px;display:flex;flex-direction:column;gap:9px;align-items:center}
+    .rail-icon{width:31px;height:31px;border-radius:9px;border:1px solid transparent;display:grid;place-items:center;color:#778295;font-size:13px}
+    .rail-icon.active{color:var(--accent);background:rgba(114,246,189,.09);border-color:rgba(114,246,189,.12)}
+    .side{border-right:1px solid var(--line);padding:16px 14px}
+    .side-head{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;margin-bottom:16px}
+    .count{font:10px "DM Mono";color:#6e7888}
+    .filter{height:28px;border:1px solid var(--line);border-radius:8px;color:#6e7888;font:10px "DM Mono";padding:7px;margin-bottom:10px}
+    .ticket{padding:11px 10px;border-radius:11px;margin:4px 0;border:1px solid transparent}
+    .ticket.active{background:rgba(107,167,255,.08);border-color:rgba(107,167,255,.12)}
+    .ticket strong{display:block;font-size:11px;margin-bottom:5px}.ticket span{display:block;font-size:9px;color:#737f91;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .ticket .tiny{margin-top:7px;color:#72f6bd;font:9px "DM Mono"}
+    .conversation{min-width:0;display:flex;flex-direction:column}
+    .conv-head{height:54px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 18px}
+    .person{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:700}
+    .avatar{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#23314a,#17231e);font-size:10px;color:#bdebd8}
+    .status{font:9px "DM Mono";color:var(--accent);padding:5px 8px;border-radius:7px;background:rgba(114,246,189,.08)}
+    .messages{padding:20px;display:flex;flex-direction:column;gap:11px;flex:1}
+    .msg{max-width:73%;padding:10px 12px;border-radius:12px;font-size:10px;line-height:1.5;color:#aab4c3;background:#151c27;border:1px solid var(--line)}
+    .msg.user{align-self:flex-start}.msg.agent{align-self:flex-end;background:rgba(114,246,189,.08);border-color:rgba(114,246,189,.11);color:#c6dfd5}
+    .msg.ai{align-self:flex-end;background:rgba(161,140,255,.09);border-color:rgba(161,140,255,.14);color:#d5cff2}
+    .msg small{display:block;color:#657083;margin-top:5px;font:8px "DM Mono"}
+    .composer{margin:0 17px 16px;border:1px solid var(--line);border-radius:10px;padding:10px;color:#596476;font-size:9px}
+    .context{padding:15px;border-left:0}
+    .context h4{font-size:10px;margin:2px 0 12px;color:#aab4c3}.context-card{padding:10px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px}
+    .context-card span{display:block;color:#687486;font:8px "DM Mono";margin-bottom:5px}.context-card b{font-size:10px}
+    .meter{height:5px;border-radius:99px;background:#1d2633;overflow:hidden;margin-top:8px}.meter i{display:block;height:100%;width:72%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:inherit}
+
+    /* COMMON SECTIONS */
+    section{padding:125px 0;position:relative}
+    .section-head{max-width:760px;margin-bottom:55px}
+    .section-head h2{font-size:clamp(38px,5vw,68px);line-height:1;letter-spacing:-.06em;margin:17px 0 18px}
+    .section-head p{color:var(--muted);font-size:16px;line-height:1.7;max-width:650px}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .card{position:relative;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(145deg,rgba(20,26,37,.74),rgba(10,13,19,.66));overflow:hidden;box-shadow:0 25px 80px rgba(0,0,0,.15)}
+    .card:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,0%),rgba(114,246,189,.09),transparent 28%);pointer-events:none}
+    .feature{padding:27px;min-height:310px}
+    .feature-icon{width:43px;height:43px;border-radius:13px;display:grid;place-items:center;border:1px solid var(--line);background:rgba(255,255,255,.035);font-size:18px;margin-bottom:55px}
+    .feature h3{font-size:19px;letter-spacing:-.03em;margin:0 0 9px}.feature p{color:var(--muted);font-size:13px;line-height:1.65;margin:0}
+    .tag{display:inline-block;margin-top:17px;padding:5px 8px;border-radius:7px;background:rgba(114,246,189,.07);color:var(--accent);font:9px "DM Mono"}
+
+    /* LIVE DEMO */
+    .demo-section{padding-top:70px}
+    .demo-shell{border:1px solid var(--line-strong);border-radius:30px;background:rgba(10,14,21,.74);box-shadow:var(--shadow);overflow:hidden}
+    .demo-top{padding:20px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:15px}
+    .demo-top strong{font-size:14px}.demo-top span{color:var(--muted);font:10px "DM Mono"}
+    .demo-body{display:grid;grid-template-columns:190px 1fr 250px;min-height:610px}
+    .demo-nav{padding:17px;border-right:1px solid var(--line);background:rgba(255,255,255,.015)}
+    .demo-nav button{width:100%;display:flex;gap:10px;align-items:center;text-align:left;border:0;background:transparent;color:#778295;padding:10px;border-radius:9px;cursor:pointer;font-size:11px;margin-bottom:3px}
+    .demo-nav button.active{color:var(--text);background:rgba(114,246,189,.08)}
+    .demo-nav button b{margin-left:auto;color:#596476;font:9px "DM Mono"}
+    .demo-main{display:flex;flex-direction:column;min-width:0}
+    .demo-main-head{padding:17px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+    .demo-main-head .title{font-size:13px;font-weight:700}.live{font:9px "DM Mono";color:var(--accent);display:flex;gap:6px;align-items:center}.live i{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+    .demo-conv{flex:1;padding:20px;overflow:auto;display:flex;flex-direction:column;gap:13px}
+    .dmsg{max-width:78%;border:1px solid var(--line);padding:12px 14px;border-radius:14px;font-size:11px;line-height:1.55;color:#aeb8c7;background:#121925}
+    .dmsg.you{align-self:flex-end;background:rgba(114,246,189,.075);border-color:rgba(114,246,189,.13);color:#cfe8dd}
+    .dmsg.ai{align-self:flex-end;background:rgba(161,140,255,.08);border-color:rgba(161,140,255,.14)}
+    .dmsg .meta{font:8px "DM Mono";color:#667285;margin-top:7px}
+    .demo-actions{padding:12px 15px;border-top:1px solid var(--line);display:flex;gap:7px;flex-wrap:wrap}
+    .demo-actions button{border:1px solid var(--line);background:rgba(255,255,255,.04);color:#b7c1cf;border-radius:9px;padding:8px 10px;font-size:9px;cursor:pointer}
+    .demo-actions button:hover{border-color:rgba(114,246,189,.25);color:var(--accent)}
+    .demo-context{padding:18px;border-left:1px solid var(--line);background:rgba(255,255,255,.012)}
+    .context-title{font:9px "DM Mono";letter-spacing:.1em;text-transform:uppercase;color:#667285;margin-bottom:12px}
+    .insight{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:9px}
+    .insight strong{font-size:10px;display:block;margin-bottom:6px}.insight p{margin:0;color:#798597;font-size:9px;line-height:1.5}
+    .flow{display:flex;align-items:center;gap:5px;margin:15px 0}.flow-node{font:8px "DM Mono";padding:6px 7px;border:1px solid var(--line);border-radius:7px;color:#758092}.flow-node.on{border-color:rgba(114,246,189,.35);color:var(--accent);background:rgba(114,246,189,.06)}.flow-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(114,246,189,.4),rgba(107,167,255,.3))}
+    .demo-note{padding:11px 18px;border-top:1px solid var(--line);font:9px "DM Mono";color:#667285}
+
+    /* SYSTEM MAP */
+    .system-map{min-height:600px;position:relative;display:grid;place-items:center}
+    .system-map:before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(114,246,189,.1),transparent 65%);filter:blur(10px)}
+    .core{width:190px;height:190px;border-radius:50%;display:grid;place-items:center;text-align:center;z-index:2;
+      border:1px solid rgba(114,246,189,.35);background:radial-gradient(circle at 35% 30%,rgba(114,246,189,.18),rgba(12,18,24,.94) 62%);
+      box-shadow:0 0 90px rgba(114,246,189,.12),inset 0 0 60px rgba(114,246,189,.05)}
+    .core strong{display:block;font-size:24px;letter-spacing:-.06em}.core small{color:#718091;font:9px "DM Mono";display:block;margin-top:6px}
+    .node{position:absolute;padding:12px 14px;border:1px solid var(--line);background:rgba(12,16,23,.84);backdrop-filter:blur(14px);border-radius:13px;font-size:11px;box-shadow:0 15px 40px rgba(0,0,0,.24);animation:float 5s ease-in-out infinite}
+    .node span{display:block;color:#667285;font:8px "DM Mono";margin-top:4px}.node:after{content:"";position:absolute;width:80px;height:1px;background:linear-gradient(90deg,rgba(114,246,189,.45),transparent)}
+    .n1{top:8%;left:9%;animation-delay:-1s}.n2{top:14%;right:9%;animation-delay:-2.1s}.n3{bottom:15%;left:12%;animation-delay:-3.3s}.n4{bottom:8%;right:12%;animation-delay:-.5s}.n5{top:47%;right:1%;animation-delay:-4s}.n6{top:46%;left:1%;animation-delay:-2.5s}
+    @keyframes float{50%{transform:translateY(-10px)}}
+
+    /* ENGINEERING */
+    .engineering{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;align-items:stretch}
+    .arch-card{padding:30px;min-height:500px}
+    .arch-card h3{font-size:21px;letter-spacing:-.04em;margin:15px 0 8px}.arch-card p{color:var(--muted);font-size:13px;line-height:1.7}
+    .stack{margin-top:30px;display:grid;gap:9px}.stack-row{display:grid;grid-template-columns:110px 1fr;align-items:center;border:1px solid var(--line);border-radius:11px;padding:11px 13px}.stack-row span{font:9px "DM Mono";color:#667285}.stack-row b{font-size:10px;font-weight:600}
+    .code-card{padding:0;overflow:hidden}.code-head{height:44px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 15px;gap:6px}.code{padding:24px;font:11px/1.85 "DM Mono";color:#91a0b4;white-space:pre-wrap}.kw{color:#a18cff}.fn{color:#72f6bd}.str{color:#ffcf70}.cm{color:#4e5b6d}
+
+    /* METRICS */
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:24px;overflow:hidden;background:rgba(255,255,255,.02)}
+    .metric{padding:27px;border-right:1px solid var(--line)}.metric:last-child{border-right:0}.metric b{display:block;font-size:36px;letter-spacing:-.06em}.metric span{display:block;color:#717d8e;font:9px "DM Mono";text-transform:uppercase;letter-spacing:.08em;margin-top:8px}
+
+    /* CTA */
+    .cta{padding:150px 0;text-align:center;overflow:hidden}.cta:before{content:"";position:absolute;left:50%;top:50%;width:700px;height:700px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(114,246,189,.09),transparent 65%);pointer-events:none}.cta h2{font-size:clamp(45px,7vw,92px);line-height:.95;letter-spacing:-.07em;margin:18px auto 24px;max-width:850px}.cta p{color:var(--muted);max-width:600px;margin:auto;line-height:1.7}.cta .hero-actions{margin-top:28px}
+    footer{padding:30px 0 45px;border-top:1px solid var(--line);color:#5d6878;font:10px "DM Mono";display:flex;justify-content:space-between;gap:20px}.footer-links{display:flex;gap:15px}.footer-links a:hover{color:var(--text)}
+
+    /* DEMO MODAL */
+    .modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(2,4,7,.78);backdrop-filter:blur(14px)}
+    .modal.open{display:flex}.modal-box{width:min(1180px,100%);max-height:92vh;overflow:auto;border:1px solid var(--line-strong);border-radius:24px;background:#0b0f16;box-shadow:0 50px 150px rgba(0,0,0,.6);position:relative}
+    .modal-close{position:absolute;right:14px;top:12px;width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);cursor:pointer;z-index:2}
+    .modal-header{padding:26px 28px 20px;border-bottom:1px solid var(--line)}.modal-header h2{margin:8px 0;font-size:28px;letter-spacing:-.05em}.modal-header p{margin:0;color:var(--muted);font-size:12px}
+    .modal-grid{display:grid;grid-template-columns:210px 1fr 260px;min-height:580px}
+    .sim-nav{padding:17px;border-right:1px solid var(--line)}.sim-nav button{width:100%;padding:11px;text-align:left;border:0;background:transparent;color:#7d899a;border-radius:9px;font-size:11px;cursor:pointer}.sim-nav button.active{background:rgba(114,246,189,.08);color:var(--text)}
+    .sim-stage{position:relative;overflow:hidden}.sim-stage canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.18;pointer-events:none}.sim-ui{position:relative;z-index:1;padding:24px}.sim-title{font-size:17px;font-weight:800}.sim-sub{color:#738093;font-size:10px;margin-top:5px}.sim-card{margin-top:22px;border:1px solid var(--line);border-radius:16px;background:rgba(10,14,21,.75);padding:18px}.sim-row{display:flex;justify-content:space-between;gap:10px;align-items:center}.sim-pill{font:8px "DM Mono";padding:5px 8px;border-radius:7px;background:rgba(114,246,189,.08);color:var(--accent)}.sim-chat{margin-top:15px;display:grid;gap:9px}.bubble{padding:10px 12px;border:1px solid var(--line);border-radius:11px;max-width:80%;font-size:10px;line-height:1.5}.bubble.customer{background:#131a25}.bubble.system{justify-self:end;background:rgba(161,140,255,.08);border-color:rgba(161,140,255,.16)}.sim-controls{display:flex;gap:7px;flex-wrap:wrap;margin-top:17px}.sim-controls button{border:1px solid var(--line);background:#131923;color:#aab4c2;border-radius:9px;padding:9px 10px;font-size:9px;cursor:pointer}.sim-controls button.primary{background:var(--accent);color:#06100c;border-color:transparent;font-weight:800}
+    .sim-side{padding:17px;border-left:1px solid var(--line)}.sim-side .insight{background:rgba(255,255,255,.015)}.progress{height:5px;background:#1b2330;border-radius:9px;overflow:hidden;margin-top:10px}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:1s ease}
+    .toast{position:fixed;right:20px;bottom:20px;z-index:200;transform:translateY(20px);opacity:0;pointer-events:none;border:1px solid rgba(114,246,189,.2);background:#10161f;color:#c9ddd5;border-radius:12px;padding:12px 14px;font-size:10px;box-shadow:var(--shadow);transition:.3s}.toast.show{opacity:1;transform:none}
+
+    .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}.reveal.visible{opacity:1;transform:none}
+    .tilt{transform-style:preserve-3d}
+    @media(max-width:950px){
+      .nav-links{display:none}.menu{display:block}.nav-cta{display:none}
+      .hero{min-height:820px}.app{grid-template-columns:48px 190px 1fr}.context{display:none}
+      .grid3{grid-template-columns:1fr 1fr}.engineering{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.metric:nth-child(2){border-right:0}.metric:nth-child(-n+2){border-bottom:1px solid var(--line)}
+      .demo-body,.modal-grid{grid-template-columns:160px 1fr}.demo-context,.sim-side{display:none}
+      .system-map .n5,.system-map .n6{display:none}
+    }
+    @media(max-width:650px){
+      .container{width:min(calc(100% - 24px),var(--max))}.hero{padding-top:135px;min-height:760px}.hero h1{font-size:54px}.preview-wrap{margin-top:50px}.product-window{transform:none}.app{grid-template-columns:1fr;min-height:390px}.rail,.side{display:none}.conversation{min-height:390px}.hero-orbit{width:110vw;height:110vw}
+      section{padding:85px 0}.grid3{grid-template-columns:1fr}.feature{min-height:auto}.feature-icon{margin-bottom:35px}.metrics{grid-template-columns:1fr 1fr}.metric{padding:19px}.metric b{font-size:28px}.system-map{min-height:480px}.core{width:150px;height:150px}.node{font-size:9px}.n1{left:0}.n2{right:0}.n3{left:0}.n4{right:0}
+      .demo-body,.modal-grid{grid-template-columns:1fr}.demo-nav,.sim-nav{display:flex;gap:5px;overflow:auto;border-right:0;border-bottom:1px solid var(--line)}.demo-nav button,.sim-nav button{width:auto;white-space:nowrap}.demo-main{min-height:560px}.modal{padding:8px}.modal-box{max-height:96vh}
+      footer{display:block}.footer-links{margin-top:10px}.hero-actions .btn{width:100%;max-width:320px}
+    }
+    @media(prefers-reduced-motion:reduce){
+      *,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}
+      #hero3d{display:none}
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="brand" href="#top" aria-label="LibreDesk home"><span class="brand-mark"></span><span>LibreDesk</span></a>
+    <div class="nav-links">
+      <a href="#product">Product</a><a href="#demo">Live demo</a><a href="#architecture">Architecture</a><a href="#engineering">Engineering</a>
+    </div>
+    <a class="nav-cta" href="#demo">Explore demo <span>↗</span></a>
+    <button class="menu" aria-label="Open menu" onclick="document.querySelector('.nav-links').style.display='flex'">☰</button>
+  </nav>
+
+  <main id="top">
+    <section class="hero">
+      <canvas id="hero3d" aria-hidden="true"></canvas>
+      <div class="hero-orbit"></div>
+      <div class="container">
+        <div class="hero-copy reveal">
+          <div class="eyebrow"><i></i> open-source customer support infrastructure</div>
+          <h1>Support that feels<br><span class="gradient">in control.</span></h1>
+          <p>LibreDesk brings email, live chat and WhatsApp into one self-hosted workspace — with AI assistance, automation, analytics and integrations built around the conversations that matter.</p>
+          <div class="hero-actions">
+            <button class="btn" onclick="openDemo()">Open live product demo <span>→</span></button>
+            <a class="btn secondary" href="#engineering">See the engineering <span>↓</span></a>
+          </div>
+          <div class="trust">SELF-HOSTED · SINGLE BINARY · GO + VUE · REALTIME · API READY</div>
+        </div>
+
+        <div class="preview-wrap reveal" id="product">
+          <div class="product-window tilt" id="productWindow">
+            <div class="window-bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="window-label">libredesk / inbox / live</span></div>
+            <div class="app">
+              <aside class="rail">
+                <div class="rail-icon active">⌂</div><div class="rail-icon">◫</div><div class="rail-icon">◎</div><div class="rail-icon">✦</div><div class="rail-icon">◈</div>
+              </aside>
+              <aside class="side">
+                <div class="side-head"><span>Inbox</span><span class="count">24 open</span></div>
+                <div class="filter">⌕ Search conversations</div>
+                <div class="ticket active"><strong>Payment question</strong><span>“Can you check my invoice?”</span><span class="tiny">● LIVE CHAT · 2m</span></div>
+                <div class="ticket"><strong>API integration</strong><span>Webhook response is delayed</span><span class="tiny">EMAIL · 8m</span></div>
+                <div class="ticket"><strong>Order update</strong><span>Need tracking information</span><span class="tiny">WHATSAPP · 12m</span></div>
+              </aside>
+              <section class="conversation">
+                <div class="conv-head"><div class="person"><span class="avatar">AR</span> Alex Rivera</div><span class="status">OPEN · 04:12 SLA</span></div>
+                <div class="messages">
+                  <div class="msg user">Hi! I was charged twice for the same order. Can you check what happened?<small>customer · live chat · 10:42</small></div>
+                  <div class="msg ai">I can help with that. I found the order and I’m checking the payment events now. One moment.<small>AI assistant · knowledge-assisted</small></div>
+                  <div class="msg agent">I’ve confirmed the duplicate authorization. I’ll make sure the extra hold is released and keep you updated here.<small>Sam · support · 10:43</small></div>
+                </div>
+                <div class="composer">Write a reply… <span style="float:right;color:#72f6bd">AI draft ↗</span></div>
+              </section>
+              <aside class="context">
+                <h4>Customer context</h4>
+                <div class="context-card"><span>CONTACT</span><b>Alex Rivera</b></div>
+                <div class="context-card"><span>TEAM</span><b>Payments</b></div>
+                <div class="context-card"><span>SLA HEALTH</span><b style="color:#72f6bd">On track</b><div class="meter"><i></i></div></div>
+                <div class="context-card"><span>TAGS</span><b>#billing &nbsp; #duplicate</b></div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="product">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="eyebrow"><i></i> one system, many surfaces</div>
+          <h2>The work is complex.<br><span class="gradient">The experience isn’t.</span></h2>
+          <p>Every capability in the product is designed around the same unit of work: a customer conversation. That makes the story understandable to a customer — and legible to an engineering recruiter.</p>
+        </div>
+        <div class="grid3">
+          <article class="card feature reveal"><div class="feature-icon">◎</div><h3>Unified inbox</h3><p>Email, live chat and WhatsApp conversations come together with teams, tags, statuses, custom attributes, search and snoozing.</p><span class="tag">CONVERSATIONS</span></article>
+          <article class="card feature reveal"><div class="feature-icon">✦</div><h3>AI assistance</h3><p>Knowledge-aware assistance can answer live-chat questions, hand off to agents, draft replies, summarize conversations and surface answers.</p><span class="tag">AI + KNOWLEDGE</span></article>
+          <article class="card feature reveal"><div class="feature-icon">⌁</div><h3>Automation engine</h3><p>Rules can route and update conversations, while macros and auto-assignment turn repetitive support work into predictable workflows.</p><span class="tag">WORKFLOWS</span></article>
+          <article class="card feature reveal"><div class="feature-icon">◷</div><h3>SLA + analytics</h3><p>Response targets, breach notifications, CSAT and reporting make operational performance visible instead of anecdotal.</p><span class="tag">OPERATIONS</span></article>
+          <article class="card feature reveal"><div class="feature-icon">⌘</div><h3>Admin + security</h3><p>Roles, granular permissions, OIDC/SSO, activity logs, notification settings and business-hours controls are built into the platform.</p><span class="tag">GOVERNANCE</span></article>
+          <article class="card feature reveal"><div class="feature-icon">↗</div><h3>Integrations</h3><p>APIs, webhooks and context links make LibreDesk composable with the rest of an organization’s systems and workflows.</p><span class="tag">EXTENSIBILITY</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="demo" class="demo-section">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="eyebrow"><i></i> click-through simulation</div>
+          <h2>Don’t just describe it.<br><span class="gradient">Watch the workflow.</span></h2>
+          <p>This embedded demo is intentionally non-technical. Click through a customer request, let the AI layer assist, hand it to a human, resolve it and see the operational state change.</p>
+        </div>
+        <div class="demo-shell reveal">
+          <div class="demo-top"><div><strong>LibreDesk / Operations</strong><span style="margin-left:12px">interactive product story</span></div><button class="btn" onclick="openDemo()">Enter full demo ↗</button></div>
+          <div class="demo-body">
+            <nav class="demo-nav">
+              <button class="active" data-demo-tab="inbox">◎ Inbox <b>24</b></button>
+              <button data-demo-tab="ai">✦ AI assistant</button>
+              <button data-demo-tab="automation">⌁ Automation</button>
+              <button data-demo-tab="analytics">◷ Analytics</button>
+            </nav>
+            <div class="demo-main">
+              <div class="demo-main-head"><span class="title" id="demoTitle">Live conversation</span><span class="live"><i></i> REALTIME SIMULATION</span></div>
+              <div class="demo-conv" id="demoMessages">
+                <div class="dmsg">Hi! I was charged twice for my order. Can you help me understand what happened?<div class="meta">ALEX RIVERA · LIVE CHAT · JUST NOW</div></div>
+                <div class="dmsg you">Absolutely. I’ll check the payment events and make sure the extra authorization is handled.<div class="meta">SUPPORT AGENT · DRAFT</div></div>
+              </div>
+              <div class="demo-actions">
+                <button onclick="simulateCustomer()">+ Customer message</button>
+                <button onclick="simulateAI()">✦ AI draft</button>
+                <button onclick="handoff()">→ Handoff to agent</button>
+                <button onclick="resolveDemo()">✓ Resolve</button>
+                <button onclick="resetDemo()">↻ Reset</button>
+              </div>
+            </div>
+            <aside class="demo-context">
+              <div class="context-title">System state</div>
+              <div class="insight"><strong>Channel</strong><p id="stateChannel">Live chat connected</p></div>
+              <div class="insight"><strong>AI</strong><p id="stateAI">Waiting for a knowledge-assisted action</p></div>
+              <div class="insight"><strong>Assignment</strong><p id="stateAssign">Unassigned → Payments</p></div>
+              <div class="insight"><strong>SLA</strong><p id="stateSLA">04:12 remaining · on track</p><div class="progress"><i id="slaBar"></i></div></div>
+              <div class="flow"><span class="flow-node on">IN</span><i class="flow-line"></i><span class="flow-node" id="flowAI">AI</span><i class="flow-line"></i><span class="flow-node" id="flowAgent">AGENT</span><i class="flow-line"></i><span class="flow-node" id="flowDone">DONE</span></div>
+            </aside>
+          </div>
+          <div class="demo-note">Simulation only · UI states mirror the product concepts; no customer data or backend calls are used by this portfolio page.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="architecture">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="eyebrow"><i></i> system view</div>
+          <h2>One conversation.<br><span class="gradient">Many intelligent paths.</span></h2>
+          <p>Use this visual to explain the product to a non-technical person first, then let the same diagram lead a technical reviewer toward the architecture underneath.</p>
+        </div>
+        <div class="card system-map reveal">
+          <div class="core"><div><strong>LibreDesk</strong><small>conversation engine</small></div></div>
+          <div class="node n1">Email<span>IMAP / SMTP</span></div>
+          <div class="node n2">Live chat<span>WebSocket realtime</span></div>
+          <div class="node n3">WhatsApp<span>Meta Cloud API</span></div>
+          <div class="node n4">AI layer<span>knowledge + embeddings</span></div>
+          <div class="node n5">Automation<span>rules + routing</span></div>
+          <div class="node n6">Operations<span>SLA + CSAT + reports</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="engineering">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="eyebrow"><i></i> recruiter lens</div>
+          <h2>Product polish on top.<br><span class="gradient">Engineering depth underneath.</span></h2>
+          <p>The page deliberately exposes the implementation choices a recruiter or engineer may want to understand without forcing a non-technical visitor to read source code.</p>
+        </div>
+        <div class="engineering">
+          <article class="card arch-card reveal">
+            <div class="eyebrow"><i></i> stack snapshot</div>
+            <h3>Built as a real application, not a landing-page prototype.</h3>
+            <p>The uploaded repository contains a Go backend and a Vue 3 frontend. The application uses PostgreSQL and Redis, has realtime WebSocket paths, frontend component tests/e2e coverage, and a broad internal domain model for conversations, AI, automation, auth, reporting and integrations.</p>
+            <div class="stack">
+              <div class="stack-row"><span>BACKEND</span><b>Go 1.25 · HTTP handlers · domain packages</b></div>
+              <div class="stack-row"><span>FRONTEND</span><b>Vue 3 · Vue Router · Pinia · Tailwind / component UI</b></div>
+              <div class="stack-row"><span>DATA</span><b>PostgreSQL · Redis</b></div>
+              <div class="stack-row"><span>REALTIME</span><b>WebSockets · live-chat widget</b></div>
+              <div class="stack-row"><span>AI</span><b>knowledge base · embeddings · assistant / copilot</b></div>
+              <div class="stack-row"><span>DELIVERY</span><b>single binary · Docker · Railway option</b></div>
+            </div>
+          </article>
+          <article class="card code-card reveal">
+            <div class="code-head"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="window-label">system-flow.go</span></div>
+            <div class="code"><span class="cm">// conceptual flow shown for recruiters</span>
+<span class="kw">type</span> ConversationPipeline <span class="kw">struct</span> {
+  Channel     <span class="fn">Channel</span>
+  Conversation <span class="fn">Conversation</span>
+  AI          <span class="fn">Assistant</span>
+  Automation  <span class="fn">Rules</span>
+}
+
+<span class="kw">func</span> (p *ConversationPipeline) <span class="fn">Handle</span>(event Event) {
+  conversation := p.Channel.Ingest(event)
+  context := p.AI.RetrieveKnowledge(conversation)
+
+  <span class="kw">if</span> context.CanAnswer {
+    p.AI.Respond(context)
+  }
+
+  p.Automation.Route(conversation)
+  p.NotifyRealtime(conversation)
+  p.Measure.SLA(conversation)
+}
+
+<span class="cm">// outcome:</span>
+<span class="str">// one customer request → one traceable workflow</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="metrics reveal">
+          <div class="metric"><b>3</b><span>customer channels</span></div>
+          <div class="metric"><b>AI</b><span>knowledge-assisted support</span></div>
+          <div class="metric"><b>∞</b><span>workflow combinations</span></div>
+          <div class="metric"><b>1</b><span>self-hosted platform</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container reveal">
+        <div class="eyebrow"><i></i> understand it in 60 seconds</div>
+        <h2>See the customer side.<br><span class="gradient">Then see the system.</span></h2>
+        <p>Start with the visual workflow, then open the engineering section when you want to understand how the pieces fit together.</p>
+        <div class="hero-actions"><button class="btn" onclick="openDemo()">Launch interactive demo →</button><a class="btn secondary" href="#top">Back to top ↑</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container">
+    <span>LIBREDESK · OPEN SOURCE · SELF-HOSTED CUSTOMER SUPPORT</span>
+    <div class="footer-links">
+      <a href="https://github.com/abhinavxd/libredesk" target="_blank" rel="noreferrer">GitHub ↗</a>
+      <a href="https://libredesk.io" target="_blank" rel="noreferrer">Project ↗</a>
+      <a href="https://docs.libredesk.io" target="_blank" rel="noreferrer">Docs ↗</a>
+    </div>
+  </footer>
+
+  <!-- Full-screen interactive simulation -->
+  <div class="modal" id="demoModal" role="dialog" aria-modal="true" aria-labelledby="demoModalTitle">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeDemo()" aria-label="Close">×</button>
+      <div class="modal-header">
+        <div class="eyebrow"><i></i> live product walkthrough</div>
+        <h2 id="demoModalTitle">A customer request, from message to resolution.</h2>
+        <p>Click the actions below. The simulation changes the conversation, AI state, routing state and SLA state together — like a small product inside the portfolio site.</p>
+      </div>
+      <div class="modal-grid">
+        <nav class="sim-nav">
+          <button class="active">01 · Incoming request</button>
+          <button>02 · AI assistance</button>
+          <button>03 · Human handoff</button>
+          <button>04 · Resolution</button>
+        </nav>
+        <section class="sim-stage">
+          <canvas id="simCanvas"></canvas>
+          <div class="sim-ui">
+            <div class="sim-title" id="simTitle">Customer reports a duplicate payment</div>
+            <div class="sim-sub">Live chat · Payments team · simulated environment</div>
+            <div class="sim-card">
+              <div class="sim-row"><strong id="simStatus">New conversation</strong><span class="sim-pill" id="simPill">OPEN</span></div>
+              <div class="sim-chat" id="simChat">
+                <div class="bubble customer">Hi! I think I was charged twice for the same order. Can you check?</div>
+              </div>
+              <div class="sim-controls">
+                <button class="primary" onclick="simAI()">✦ Ask AI to assist</button>
+                <button onclick="simHandoff()">→ Hand to agent</button>
+                <button onclick="simResolve()">✓ Resolve</button>
+                <button onclick="simReset()">↻ Reset</button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <aside class="sim-side">
+          <div class="context-title">What the system is doing</div>
+          <div class="insight"><strong>AI context</strong><p id="simAIState">Waiting for an agent/assistant action.</p></div>
+          <div class="insight"><strong>Routing</strong><p id="simRoute">Payments team · unassigned</p></div>
+          <div class="insight"><strong>SLA</strong><p id="simSLA">Target active · 04:12 remaining</p><div class="progress"><i id="simProgress"></i></div></div>
+          <div class="insight"><strong>Outcome</strong><p id="simOutcome">Conversation remains open.</p></div>
+        </aside>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast">Action completed</div>
+
+  <!-- Three.js is used only for the visual layer. The actual product demo is DOM/JS and works without WebGL. -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js"></script>
+  <script>
+    // ---------- 3D hero ----------
+    (() => {
+      const canvas = document.getElementById('hero3d');
+      if (!canvas || !window.THREE || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+      renderer.setPixelRatio(Math.min(devicePixelRatio, 1.8));
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(48, innerWidth/innerHeight, .1, 100);
+      camera.position.set(0,0,7);
+      const group = new THREE.Group(); scene.add(group);
+      const geo = new THREE.IcosahedronGeometry(1.85, 2);
+      const mat = new THREE.MeshPhysicalMaterial({
+        color:0x7ef5c1, roughness:.24, metalness:.45, transmission:.08,
+        transparent:true, opacity:.28, wireframe:true
+      });
+      const shell = new THREE.Mesh(geo, mat); group.add(shell);
+      const inner = new THREE.Mesh(new THREE.IcosahedronGeometry(1.05,2),
+        new THREE.MeshBasicMaterial({color:0x6ba7ff,wireframe:true,transparent:true,opacity:.13}));
+      group.add(inner);
+      const points = new THREE.BufferGeometry();
+      const count=900, pos=new Float32Array(count*3);
+      for(let i=0;i<count;i++){
+        const r=3.2+Math.random()*3.8, a=Math.random()*Math.PI*2, b=Math.acos(2*Math.random()-1);
+        pos[i*3]=r*Math.sin(b)*Math.cos(a);pos[i*3+1]=r*Math.sin(b)*Math.sin(a);pos[i*3+2]=r*Math.cos(b);
+      }
+      points.setAttribute('position',new THREE.BufferAttribute(pos,3));
+      const stars=new THREE.Points(points,new THREE.PointsMaterial({color:0xa8c7ff,size:.012,transparent:true,opacity:.65}));
+      scene.add(stars);
+      const light=new THREE.PointLight(0x72f6bd,8,9);light.position.set(2,1,3);scene.add(light);
+      const light2=new THREE.PointLight(0x6ba7ff,6,10);light2.position.set(-3,-2,2);scene.add(light2);
+      let mx=0,my=0;
+      addEventListener('pointermove',e=>{mx=(e.clientX/innerWidth-.5);my=(e.clientY/innerHeight-.5)});
+      function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}
+      addEventListener('resize',resize); resize();
+      let t=0;
+      function frame(){
+        t+=.003;
+        group.rotation.y=t*.45+mx*.25;group.rotation.x=t*.18+my*.12;
+        inner.rotation.y=-t*.7;inner.rotation.z=t*.35;
+        stars.rotation.y=t*.035;stars.rotation.x=my*.03;
+        renderer.render(scene,camera);requestAnimationFrame(frame)
+      } frame();
+    })();
+
+    // ---------- full demo particle canvas ----------
+    function setupSimCanvas(){
+      const c=document.getElementById('simCanvas'); if(!c) return;
+      const ctx=c.getContext('2d'); let w,h,pts=[];
+      function resize(){w=c.width=c.clientWidth*devicePixelRatio;h=c.height=c.clientHeight*devicePixelRatio;pts=Array.from({length:80},()=>({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25}))}
+      function draw(){ctx.clearRect(0,0,w,h);ctx.fillStyle='rgba(114,246,189,.7)';pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>h)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,1.1*devicePixelRatio,0,Math.PI*2);ctx.fill()});requestAnimationFrame(draw)}
+      addEventListener('resize',resize);resize();draw();
+    }
+    setupSimCanvas();
+
+    // ---------- scroll reveal ----------
+    const observer=new IntersectionObserver(entries=>entries.forEach(e=>e.isIntersecting&&e.target.classList.add('visible')),{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+    // ---------- card spotlight ----------
+    document.querySelectorAll('.card').forEach(card=>{
+      card.addEventListener('pointermove',e=>{
+        const r=card.getBoundingClientRect();card.style.setProperty('--mx',(e.clientX-r.left)+'px');card.style.setProperty('--my',(e.clientY-r.top)+'px')
+      })
+    });
+
+    // ---------- product tilt ----------
+    const pw=document.getElementById('productWindow');
+    if(pw && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+      pw.addEventListener('pointermove',e=>{const r=pw.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;pw.style.transform=`rotateX(${8-y*5}deg) rotateY(${-4+x*7}deg)`});
+      pw.addEventListener('pointerleave',()=>pw.style.transform='rotateX(8deg) rotateY(-4deg)');
+    }
+
+    // ---------- demo tabs ----------
+    const tabData={
+      inbox:{title:'Live conversation',messages:[['Hi! I was charged twice for my order. Can you help?','customer'],['Absolutely. I’ll check the payment events and make sure the extra authorization is handled.','you']]},
+      ai:{title:'Knowledge-assisted AI',messages:[['Customer asks a payment question.','customer'],['AI found relevant payment guidance and drafted a response with the right context.','ai'],['The agent can review, edit or send the draft.','you']]},
+      automation:{title:'Rules + routing',messages:[['New conversation matches: channel = live chat + tag = billing','customer'],['Automation applies the billing tag and routes the conversation to Payments.','ai'],['Assignment and SLA state are visible without leaving the inbox.','you']]},
+      analytics:{title:'Operational visibility',messages:[['Open conversations','customer'],['24 active · 6 at risk · 18 on track','ai'],['Response time, resolution rate, CSAT and agent activity become measurable signals.','you']]}
+    };
+    document.querySelectorAll('[data-demo-tab]').forEach(btn=>btn.addEventListener('click',()=>{
+      document.querySelectorAll('[data-demo-tab]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+      const d=tabData[btn.dataset.demoTab];document.getElementById('demoTitle').textContent=d.title;
+      const box=document.getElementById('demoMessages');box.innerHTML=d.messages.map(x=>`<div class="dmsg ${x[1]}">${x[0]}<div class="meta">${x[1].toUpperCase()} · SIMULATED</div></div>`).join('');
+    }));
+
+    // ---------- mini live workflow ----------
+    let state={ai:false,agent:false,done:false};
+    function syncState(){
+      document.getElementById('stateAI').textContent=state.ai?'Draft generated from support knowledge':'Waiting for a knowledge-assisted action';
+      document.getElementById('stateAssign').textContent=state.agent?'Assigned to Sam · Payments':'Unassigned → Payments';
+      document.getElementById('stateSLA').textContent=state.done?'Resolved · SLA met':state.agent?'03:48 remaining · on track':'04:12 remaining · on track';
+      document.getElementById('slaBar').style.width=state.done?'100%':state.agent?'61%': '72%';
+      document.getElementById('flowAI').classList.toggle('on',state.ai);document.getElementById('flowAgent').classList.toggle('on',state.agent);document.getElementById('flowDone').classList.toggle('on',state.done);
+    }
+    function addDemoMsg(text,cls='ai'){const box=document.getElementById('demoMessages');const el=document.createElement('div');el.className='dmsg '+cls;el.innerHTML=text+'<div class="meta">LIVE SIMULATION · JUST NOW</div>';box.appendChild(el);box.scrollTop=box.scrollHeight}
+    function simulateCustomer(){addDemoMsg('One more detail: the order page still shows the payment as pending.','');toast('New customer message received');}
+    function simulateAI(){if(!state.ai){state.ai=true;addDemoMsg('AI draft: “I found the duplicate authorization. The second charge is still pending, so no second settlement has completed. I can keep monitoring it for you.”','ai');toast('AI draft generated from support context');syncState()}}
+    function handoff(){state.agent=true;addDemoMsg('Handoff complete. Sam is now assigned from the Payments team.','you');toast('Conversation routed to Payments');syncState()}
+    function resolveDemo(){state.done=true;addDemoMsg('Resolved. The conversation is closed and the SLA outcome is recorded.','you');toast('Conversation resolved');syncState()}
+    function resetDemo(){state={ai:false,agent:false,done:false};document.getElementById('demoMessages').innerHTML='<div class="dmsg">Hi! I was charged twice for my order. Can you help?<div class="meta">ALEX RIVERA · LIVE CHAT · JUST NOW</div></div><div class="dmsg you">Absolutely. I’ll check the payment events and make sure the extra authorization is handled.<div class="meta">SUPPORT AGENT · DRAFT</div></div>';syncState();toast('Simulation reset')}
+    syncState();
+
+    // ---------- modal simulation ----------
+    function openDemo(){document.getElementById('demoModal').classList.add('open');document.body.style.overflow='hidden';setTimeout(()=>document.querySelector('#demoModal .modal-close').focus(),30)}
+    function closeDemo(){document.getElementById('demoModal').classList.remove('open');document.body.style.overflow=''}
+    document.getElementById('demoModal').addEventListener('click',e=>{if(e.target.id==='demoModal')closeDemo()});
+    addEventListener('keydown',e=>{if(e.key==='Escape')closeDemo()});
+    let simState={ai:false,agent:false,done:false};
+    function simSync(){
+      document.getElementById('simAIState').textContent=simState.ai?'AI used support knowledge to draft a contextual response.':'Waiting for an agent/assistant action.';
+      document.getElementById('simRoute').textContent=simState.agent?'Sam · Payments · assigned':'Payments team · unassigned';
+      document.getElementById('simSLA').textContent=simState.done?'Target met · conversation resolved':simState.agent?'03:48 remaining · on track':'Target active · 04:12 remaining';
+      document.getElementById('simOutcome').textContent=simState.done?'Resolved and recorded.':'Conversation remains open.';
+      document.getElementById('simProgress').style.width=simState.done?'100%':simState.agent?'62%':simState.ai?'78%':'40%';
+      document.getElementById('simStatus').textContent=simState.done?'Resolved':simState.agent?'Agent handling conversation':simState.ai?'AI assistance ready':'New conversation';
+      document.getElementById('simPill').textContent=simState.done?'RESOLVED':simState.agent?'ASSIGNED':simState.ai?'AI READY':'OPEN';
+      document.getElementById('simPill').style.color=simState.done?'#72f6bd':'#72f6bd';
+    }
+    function simAdd(text,kind){const b=document.createElement('div');b.className='bubble '+kind;b.textContent=text;document.getElementById('simChat').appendChild(b)}
+    function simAI(){if(simState.ai)return;simState.ai=true;simAdd('I found the relevant payment guidance and drafted a response that explains the duplicate authorization without overpromising.','system');toast('AI assistance activated');simSync()}
+    function simHandoff(){simState.agent=true;simAdd('A human agent is now assigned to Payments with the conversation context preserved.','system');toast('Human handoff completed');simSync()}
+    function simResolve(){simState.done=true;simAdd('Resolved. The customer conversation is closed and the operational outcome is recorded.','system');toast('Resolution recorded');simSync()}
+    function simReset(){simState={ai:false,agent:false,done:false};document.getElementById('simChat').innerHTML='<div class="bubble customer">Hi! I think I was charged twice for the same order. Can you check?</div>';simSync();toast('Demo reset')}
+    simSync();
+
+    function toast(text){const t=document.getElementById('toast');t.textContent=text;t.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.remove('show'),2200)}
+  </script>
+</body>
+</html>
